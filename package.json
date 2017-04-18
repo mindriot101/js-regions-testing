@@ -1,0 +1,26 @@
+{
+  "name": "js-regions-testing",
+  "version": "1.0.0",
+  "description": "For testing out how to render regions which follow the mouse, using javascript",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mindriot101/js-regions-testing.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mindriot101/js-regions-testing/issues"
+  },
+  "homepage": "https://github.com/mindriot101/js-regions-testing#readme",
+  "dependencies": {
+    "typescript": "^2.2.2"
+  },
+  "devDependencies": {
+    "@types/jquery": "^2.0.41"
+  }
+}
