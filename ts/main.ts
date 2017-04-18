@@ -29,14 +29,47 @@ class RegionHandler {
             self.reset_canvas();
 
             $.getJSON(regions_url, function(regions: Array<Region>) {
-                self.add_region(regions[50]);
+                self.add_handlers(regions);
             });
         };
     }
 
+    add_handlers(regions: Array<Region>) {
+        let self = this;
+        /* @Optimisation: pre-compute the bounds of all regions to work out if
+         * the mouse is even over the imaging region. If it isn't then the handlers
+         * can exit early */
+        self.canvas.addEventListener('mousemove', function(e: Event) {
+            let region: Region | null = self.region_for_event(regions, e);
+            if (region != null) {
+                self.add_region(region);
+            } else {
+                self.reset_canvas();
+            }
+        });
+
+        self.canvas.addEventListener('click', function(e: Event) {
+        });
+    }
+
+    region_for_event(regions: Array<Region>, e): Region | null {
+
+        let n_regions = regions.length;
+        let x = e.offsetX;
+        let y = e.offsetY;
+
+        for (var i=0; i<n_regions; i++) {
+            let r = regions[i];
+            if ((x >= r.xmin) && (x < r.xmax) && (y >= r.ymin) && (y < r.ymax)) {
+                return r;
+            }
+        }
+
+        return null;
+    }
+
     add_region(region: Region) {
         let self = this;
-        console.log('Adding region: ', region);
 
         self.reset_canvas();
 
