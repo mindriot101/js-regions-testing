@@ -61,24 +61,30 @@ class RegionHandler {
         let bounds: Bound = self.compute_bounds(regions);
 
         self.canvas.addEventListener('mousemove', function(e: MouseEvent) {
-            if (!bounds.contains(e)) return;
+            self.reset_canvas();
+
+            if (!bounds.contains(e)) {
+                return;
+            }
 
             let region: Region | null = self.region_for_event(regions, e);
+
             if (region != null) {
                 self.add_region(region);
-            } else {
-                self.reset_canvas();
             }
         });
 
         self.canvas.addEventListener('click', function(e: MouseEvent) {
-            if (!bounds.contains(e)) return;
+            self.reset_canvas();
+
+            if (!bounds.contains(e)) {
+                return;
+            }
 
             let region: Region | null = self.region_for_event(regions, e);
+
             if (region != null) {
                 console.log('Changing window url to ' + region.href);
-            } else {
-                self.reset_canvas();
             }
         });
     }
