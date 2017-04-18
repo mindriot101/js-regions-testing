@@ -17,21 +17,21 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <canvas>Your browser does not support the canvas element :(</canvas>
+                    <canvas id="wcsStats">Your browser does not support the canvas element :(</canvas>
                 </div>
                 <div class="col-md-6">
-                    <canvas>Your browser does not support the canvas element :(</canvas>
+                    <canvas id="agStats">Your browser does not support the canvas element :(</canvas>
                 </div>
             </div>
         </div>
         <script type="text/javascript" src="app/main.js"></script>
         <script type="text/javascript">
             $(document).ready(function() {
-                var elems = $('canvas');
-                elems.each(function(i, c) {
-                    var handler = new RegionHandler(c);
-                    handler.add_mouse_handlers('image.png', 'regions.json');
-                });
+                var handler = new RegionHandler(document.getElementById('wcsStats'));
+                handler.add_mouse_handlers('image.png', 'regions.json');
+
+                var handler = new RegionHandler(document.getElementById('agStats'));
+                handler.add_mouse_handlers('image2.png', 'regions2.json');
             });
         </script>
     </bodY>
