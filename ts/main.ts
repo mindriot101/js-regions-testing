@@ -167,7 +167,7 @@ class RegionHandler {
         let dx = region.xmax - region.xmin;
         let dy = region.ymax - region.ymin;
 
-        self.context().strokeStyle = 'red';
+        self.context().strokeStyle = '#97CBD1';
         self.context().strokeRect(region.xmin, region.ymin, dx, dy);
     }
 
