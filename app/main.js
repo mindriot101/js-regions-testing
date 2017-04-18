@@ -115,7 +115,7 @@ var RegionHandler = (function () {
         self.reset_canvas();
         var dx = region.xmax - region.xmin;
         var dy = region.ymax - region.ymin;
-        self.context().strokeStyle = 'red';
+        self.context().strokeStyle = '#97CBD1';
         self.context().strokeRect(region.xmin, region.ymin, dx, dy);
     };
     RegionHandler.prototype.context = function () {
