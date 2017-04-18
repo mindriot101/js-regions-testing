@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "noEmitOnError": true,
+        "target": "es5",
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "allowUnreachableCode": false,
+        "allowUnusedLabels": false,
+        "strictNullChecks": true,
+        "outFile": "./app/main.js"
+    },
+    "files": [
+        "ts/main.ts"
+    ]
+}
+
