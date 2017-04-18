@@ -105,8 +105,7 @@ class RegionHandler {
         let x = e.offsetX;
         let y = e.offsetY;
 
-        for (var i=0; i<n_regions; i++) {
-            let r = regions[i];
+        for (let r of regions) {
             if ((x >= r.xmin) && (x < r.xmax) && (y >= r.ymin) && (y < r.ymax)) {
                 return r;
             }
