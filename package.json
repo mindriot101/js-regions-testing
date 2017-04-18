@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/mindriot101/js-regions-testing#readme",
   "dependencies": {
+    "bootstrap": "^3.3.7",
     "jquery": "^3.2.1",
     "typescript": "^2.2.2"
   },

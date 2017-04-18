@@ -6,6 +6,16 @@ interface Region {
     href: string;
 }
 
+interface MousePos {
+    x: number;
+    y: number;
+}
+
+interface Scaling {
+    x: number;
+    y: number;
+}
+
 class Bound {
     xmin: number;
     xmax: number;
@@ -19,11 +29,11 @@ class Bound {
         this.ymax = ymax;
     }
 
-    contains(e: MouseEvent): boolean {
-        return ((e.offsetX >= this.xmin) &&
-            (e.offsetX <= this.xmax) &&
-            (e.offsetY >= this.ymin) &&
-            (e.offsetY <= this.ymax));
+    contains(e: MousePos): boolean {
+        return ((e.x >= this.xmin) &&
+            (e.x <= this.xmax) &&
+            (e.y >= this.ymin) &&
+            (e.y <= this.ymax));
     }
 }
 
@@ -51,7 +61,14 @@ class RegionHandler {
 
             $.getJSON(regions_url, function(regions: Array<Region>) {
                 self.add_handlers(regions);
+            }).fail(function() {
+                self.show_error("Regions not found. Interactivity disabled");
+                console.error(`Cannot fetch regions url: ${regions_url}`);
             });
+        };
+
+        self.image.onerror = function(e: ErrorEvent) {
+            console.error(`Cannot load image: ${image_url}`);
         };
     }
 
@@ -63,11 +80,13 @@ class RegionHandler {
         self.canvas.addEventListener('mousemove', function(e: MouseEvent) {
             self.reset_canvas();
 
-            if (!bounds.contains(e)) {
+            let click = self.scaled_click(e);
+
+            if (!bounds.contains(click)) {
                 return;
             }
 
-            let region: Region | null = self.region_for_event(regions, e);
+            let region: Region | null = self.region_for_event(regions, click);
 
             if (region != null) {
                 self.add_region(region);
@@ -77,16 +96,32 @@ class RegionHandler {
         self.canvas.addEventListener('click', function(e: MouseEvent) {
             self.reset_canvas();
 
-            if (!bounds.contains(e)) {
+            let click = self.scaled_click(e);
+
+            if (!bounds.contains(click)) {
                 return;
             }
 
-            let region: Region | null = self.region_for_event(regions, e);
+            let region: Region | null = self.region_for_event(regions, click);
 
             if (region != null) {
                 console.log('Changing window url to ' + region.href);
             }
         });
+    }
+
+    scaled_click(e: MouseEvent): MousePos {
+        let scaling: Scaling = {
+            x: this.canvas.width / this.canvas.clientWidth,
+            y: this.canvas.height / this.canvas.clientHeight,
+        };
+
+        let click: MousePos = {
+            x: e.offsetX * scaling.x,
+            y: e.offsetY * scaling.y,
+        };
+
+        return click;
     }
 
     compute_bounds(regions: Array<Region>): Bound {
@@ -105,11 +140,11 @@ class RegionHandler {
         return new Bound(xmin, xmax, ymin, ymax);
     }
 
-    region_for_event(regions: Array<Region>, e): Region | null {
+    region_for_event(regions: Array<Region>, e: MousePos): Region | null {
 
         let n_regions = regions.length;
-        let x = e.offsetX;
-        let y = e.offsetY;
+        let x = e.x;
+        let y = e.y;
 
         for (let r of regions) {
             if ((x >= r.xmin) && (x < r.xmax) && (y >= r.ymin) && (y < r.ymax)) {
@@ -140,11 +175,13 @@ class RegionHandler {
         this.context().clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.context().drawImage(this.image, 0, 0);
     }
-}
 
-window.onload = function() {
-    var elem = <HTMLCanvasElement> document.getElementById("plotCanvas");
-    var handler = new RegionHandler(elem);
-    handler.add_mouse_handlers('image.png', 'regions.json');
-}
+    show_error(text: string) {
+        this.context().textAlign = 'center';
+        this.context().font = '16px serif';
 
+        this.reset_canvas();
+        this.context().fillStyle = 'red';
+        this.context().fillText(text, this.canvas.width / 2, 0.1 * this.canvas.height);
+    }
+}

@@ -3,15 +3,29 @@
     <head>
         <meta charset="utf8">
         <title>Regions testing</title>
+        <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"></link>
         <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
-        <style>
-            canvas#plotCanvas {
-                border: 1px solid black;
-            }
-        </style>
+        <script type="text/javascript" src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     </head>
+    <style>
+        canvas#plotCanvas {
+            width: 100%;
+            border: 1px solid black;
+        }
+    </style>
     <body>
-        <canvas id="plotCanvas">Your browser does not support the canvas element :(</canvas>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <canvas id="plotCanvas">Your browser does not support the canvas element :(</canvas>
+                </div>
+            </div>
+        </div>
         <script type="text/javascript" src="app/main.js"></script>
+        <script type="text/javascript">
+            var elem = document.getElementById("plotCanvas");
+            var handler = new RegionHandler(elem);
+            handler.add_mouse_handlers('image.png', 'regions.json');
+        </script>
     </bodY>
 </html>
