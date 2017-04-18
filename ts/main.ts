@@ -84,10 +84,10 @@ class RegionHandler {
     }
 
     compute_bounds(regions: Array<Region>): Bound {
-        var xmin = 10000;
-        var xmax = -10;
-        var ymin = 10000;
-        var ymax = -10;
+        var xmin = Infinity;
+        var xmax = -Infinity;
+        var ymin = Infinity;
+        var ymax = -Infinity;
 
         for (let region of regions) {
             if (region.xmin < xmin) xmin = region.xmin;
