@@ -108,6 +108,10 @@ class RegionHandler {
                 console.log('Changing window url to ' + region.href);
             }
         });
+
+        self.canvas.addEventListener('mouseleave', function(e: MouseEvent) {
+            self.reset_canvas();
+        });
     }
 
     scaled_click(e: MouseEvent): MousePos {
