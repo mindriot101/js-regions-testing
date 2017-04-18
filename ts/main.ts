@@ -49,6 +49,12 @@ class RegionHandler {
         });
 
         self.canvas.addEventListener('click', function(e: Event) {
+            let region: Region | null = self.region_for_event(regions, e);
+            if (region != null) {
+                console.log('Changing window url to ' + region.href);
+            } else {
+                self.reset_canvas();
+            }
         });
     }
 
