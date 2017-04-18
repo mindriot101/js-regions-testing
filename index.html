@@ -8,7 +8,7 @@
         <script type="text/javascript" src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     </head>
     <style>
-        canvas#plotCanvas {
+        canvas {
             width: 100%;
             border: 1px solid black;
         }
@@ -17,15 +17,22 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <canvas id="plotCanvas">Your browser does not support the canvas element :(</canvas>
+                    <canvas>Your browser does not support the canvas element :(</canvas>
+                </div>
+                <div class="col-md-6">
+                    <canvas>Your browser does not support the canvas element :(</canvas>
                 </div>
             </div>
         </div>
         <script type="text/javascript" src="app/main.js"></script>
         <script type="text/javascript">
-            var elem = document.getElementById("plotCanvas");
-            var handler = new RegionHandler(elem);
-            handler.add_mouse_handlers('image.png', 'regions.json');
+            $(document).ready(function() {
+                var elems = $('canvas');
+                elems.each(function(i, c) {
+                    var handler = new RegionHandler(c);
+                    handler.add_mouse_handlers('image.png', 'regions.json');
+                });
+            });
         </script>
     </bodY>
 </html>
