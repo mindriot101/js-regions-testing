@@ -6,6 +6,27 @@ interface Region {
     href: string;
 }
 
+class Bound {
+    xmin: number;
+    xmax: number;
+    ymin: number;
+    ymax: number;
+
+    constructor(xmin: number, xmax: number, ymin: number, ymax: number) {
+        this.xmin = xmin;
+        this.xmax = xmax;
+        this.ymin = ymin;
+        this.ymax = ymax;
+    }
+
+    contains(e: MouseEvent): boolean {
+        return ((e.offsetX >= this.xmin) &&
+            (e.offsetX <= this.xmax) &&
+            (e.offsetY >= this.ymin) &&
+            (e.offsetY <= this.ymax));
+    }
+}
+
 class RegionHandler {
     canvas: HTMLCanvasElement;
     ctx: CanvasRenderingContext2D | null;
@@ -36,10 +57,12 @@ class RegionHandler {
 
     add_handlers(regions: Array<Region>) {
         let self = this;
-        /* @Optimisation: pre-compute the bounds of all regions to work out if
-         * the mouse is even over the imaging region. If it isn't then the handlers
-         * can exit early */
-        self.canvas.addEventListener('mousemove', function(e: Event) {
+
+        let bounds: Bound = self.compute_bounds(regions);
+
+        self.canvas.addEventListener('mousemove', function(e: MouseEvent) {
+            if (!bounds.contains(e)) return;
+
             let region: Region | null = self.region_for_event(regions, e);
             if (region != null) {
                 self.add_region(region);
@@ -48,7 +71,9 @@ class RegionHandler {
             }
         });
 
-        self.canvas.addEventListener('click', function(e: Event) {
+        self.canvas.addEventListener('click', function(e: MouseEvent) {
+            if (!bounds.contains(e)) return;
+
             let region: Region | null = self.region_for_event(regions, e);
             if (region != null) {
                 console.log('Changing window url to ' + region.href);
@@ -56,6 +81,22 @@ class RegionHandler {
                 self.reset_canvas();
             }
         });
+    }
+
+    compute_bounds(regions: Array<Region>): Bound {
+        var xmin = 10000;
+        var xmax = -10;
+        var ymin = 10000;
+        var ymax = -10;
+
+        for (let region of regions) {
+            if (region.xmin < xmin) xmin = region.xmin;
+            if (region.xmax > xmax) xmax = region.xmax;
+            if (region.ymin < ymin) ymin = region.ymin;
+            if (region.ymax > ymax) ymax = region.ymax;
+        }
+
+        return new Bound(xmin, xmax, ymin, ymax);
     }
 
     region_for_event(regions: Array<Region>, e): Region | null {
